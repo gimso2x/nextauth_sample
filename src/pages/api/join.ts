@@ -17,20 +17,17 @@ export default async function handler(
       VALUES
         (
           NULL,
-          ${id},
+          "${id}",
           "${bcrypt.hashSync(pw, saltRounds)}",
         curdate(),
         curdate())`
     );
     if ((result as any)?.error) throw new Error((result as any)?.error.message);
-    console.log(result);
 
-    return res
-      .status(200)
-      .json({ code: "200", message: "가입완료되었습니다." });
+    return res.status(200).json({ code: 200, message: "가입완료되었습니다." });
   } catch (error: any) {
     return res
       .status(500)
-      .json({ code: "500", message: error?.message || "error" });
+      .json({ code: 500, message: error?.message || "error" });
   }
 }

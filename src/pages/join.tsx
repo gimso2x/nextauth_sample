@@ -1,20 +1,21 @@
-import { signIn } from "next-auth/react";
 import { FormEvent, useState } from "react";
+import { useRouter } from "next/router";
 
 const Login = () => {
   const [id, setId] = useState("");
   const [pw, setPw] = useState("");
+  const router = useRouter();
 
   const handleJoin = async (event: FormEvent<HTMLFormElement>) => {
-    console.log(event);
     const res = await fetch(`/api/join`, {
       method: "post",
       body: JSON.stringify({ id, pw }),
       headers: { "Content-Type": "application/json" },
-    });
-    // console.log(res);
-    const user3 = await res.json();
-    console.log(user3);
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.code === 200) router.push("/");
+      });
   };
   return (
     <form

@@ -24,9 +24,10 @@ export const authOptions = {
         });
         // console.log(res);
         const user = await res.json();
+
         if (user.code === 200) {
           // Any object returned will be saved in `user` property of the JWT
-          return user;
+          return { ...user };
         } else {
           // If you return null then an error will be displayed advising the user to check their details.
           return null;

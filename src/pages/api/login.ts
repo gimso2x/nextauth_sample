@@ -2,7 +2,6 @@
 import executeQuery from "@/db";
 import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcrypt";
-const saltRounds = 10;
 
 export default async function handler(
   req: NextApiRequest,
@@ -17,24 +16,16 @@ export default async function handler(
       FROM
         users where name = '${id}'`
     );
-    //   .then((data) => {
-    //   if (bcrypt.compareSync(pw, data[0].password)) {
-    //     return res.status(200).json(result);
-    //   } else {
-    //     throw new Error((result as any)?.error.message);
-    //   }
-    // });
     if ((result as any)?.error) throw new Error((result as any)?.error.message);
-    console.log(33, JSON.parse(JSON.stringify(result))[0].password);
-    // if (bcrypt.compareSync(pw, data[0].password)) {
-    //   return res.status(200).json(result);
-    // }
+
     if (!bcrypt.compareSync(pw, JSON.parse(JSON.stringify(result))[0].password))
       throw new Error((result as any)?.error.message);
 
-    return res
-      .status(200)
-      .json({ code: 200, message: "로그인 성공하셨습니다" });
+    return res.status(200).json({
+      code: 200,
+      message: "로그인 성공하셨습니다",
+      name: id,
+    });
   } catch (error: any) {
     return res
       .status(500)
