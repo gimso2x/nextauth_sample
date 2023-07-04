@@ -11,15 +11,15 @@ export async function middleware(req: NextRequest) {
   const session = await getToken({ req });
   const { pathname } = req.nextUrl;
 
-  if (unAuthUrl.includes(pathname)) {
+  if (unAuthUrl.some((path) => pathname.includes(path))) {
     if (session) {
       return NextResponse.redirect(new URL("/", req.url));
     }
   }
 
-  if (authUrl.includes(pathname)) {
+  if (authUrl.some((path) => pathname.includes(path))) {
     if (!session) {
-      return NextResponse.redirect(new URL("/", req.url));
+      return NextResponse.redirect(new URL("/login", req.url));
     }
   }
 
